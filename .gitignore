@@ -47,3 +47,6 @@ lerna-debug.log*
 /packages/graphql
 /benchmarks/memory
 build/config\.gypi
+
+# environment variables
+.env
