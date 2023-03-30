@@ -15,4 +15,28 @@ export class UserService {
       console.log('error...');
     }
   }
+
+  async getUser(username: string, password: string): Promise<User | string> {
+    try {
+      const result = await this.userModel
+        .findOne({ username, password })
+        .lean();
+      if (!result) {
+        return "User doesn't exist";
+      }
+      return result;
+    } catch (err) {
+      console.log('error...');
+    }
+  }
+
+  async addUser(data: any): Promise<boolean> {
+    try {
+      await this.userModel.insertMany(data);
+      return true;
+    } catch (err) {
+      console.log('error...');
+      return false;
+    }
+  }
 }
