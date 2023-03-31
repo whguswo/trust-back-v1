@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { loginDto } from 'src/user/dto/login.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -20,9 +22,11 @@ export class AuthService {
     return null;
   }
 
-  async login(data: any) {
-    const user = await this.userService.getUser(data.username, data.password);
-    if (typeof user !== 'string') {
+  async login(data: loginDto) {
+    const user = await this.userService.getUserByUsername(data.username);
+    if (typeof user === 'object') {
+      const result = await bcrypt.compare(data.password, user.password);
+      if (!result) return false;
       const payload = { username: user.username, role: user.role };
       return {
         access_token: this.jwtService.sign(payload, {
@@ -30,7 +34,7 @@ export class AuthService {
         }),
       };
     } else {
-      return "User doesn't exist";
+      return false;
     }
   }
 }

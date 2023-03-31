@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CreateUserDto } from './dto/createUser.dto';
 import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
 
@@ -14,7 +15,7 @@ export class UserController {
   }
 
   @Put()
-  addUser(@Body() data: any): Promise<boolean> {
-    return this.userService.addUser(data);
+  createUser(@Body() data: CreateUserDto): Promise<boolean> {
+    return this.userService.createUser(data);
   }
 }

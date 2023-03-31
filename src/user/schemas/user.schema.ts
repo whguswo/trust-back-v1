@@ -1,12 +1,8 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Assginment } from '../entities/assignment.entity';
 
 export type UserDocument = User & Document;
-export type Assignment = {
-  title: string;
-  content: string;
-  completed: boolean;
-};
 
 const options: SchemaOptions = {
   timestamps: false,
@@ -34,7 +30,7 @@ export class User {
   @Prop({
     required: true,
   })
-  assignments: Assignment[];
+  assignments: Assginment[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
