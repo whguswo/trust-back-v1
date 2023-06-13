@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateUserDto } from './dto/createUser.dto';
-import { User } from './schemas/user.schema';
+import { User } from '../models';
 import { UserService } from './user.service';
+import { Request } from 'express';
 
 @Controller('api/user')
 export class UserController {
@@ -10,12 +19,18 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  getAllUser(): Promise<User[]> {
+  getAllUser(@Req() request: Request): Promise<User[]> {
+    if (request.user.role !== 'ADMIN') throw new UnauthorizedException();
     return this.userService.getAllUser();
   }
 
-  @Put()
-  createUser(@Body() data: CreateUserDto): Promise<boolean> {
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  createUser(
+    @Req() request: Request,
+    @Body() data: CreateUserDto,
+  ): Promise<User | boolean> {
+    if (request.user.role !== 'ADMIN') throw new UnauthorizedException();
     return this.userService.createUser(data);
   }
 }

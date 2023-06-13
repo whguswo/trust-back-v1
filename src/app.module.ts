@@ -5,7 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { AssignmentModule } from './assignment/assignment.module';
 import { JwtModule } from '@nestjs/jwt';
+import { PostModule } from './post/post.module';
+import { ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
+
 ConfigModule.forRoot();
 
 @Module({
@@ -16,8 +21,16 @@ ConfigModule.forRoot();
     UserModule,
     AuthModule,
     JwtModule,
+    AssignmentModule,
+    PostModule,
   ],
   controllers: [ApiController],
-  providers: [ApiService],
+  providers: [
+    ApiService,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {}

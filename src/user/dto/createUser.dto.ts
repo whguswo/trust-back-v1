@@ -1,5 +1,4 @@
-import { IsArray, IsString } from 'class-validator';
-import { Assginment } from '../entities/assignment.entity';
+import { IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -7,10 +6,4 @@ export class CreateUserDto {
 
   @IsString()
   password: string;
-
-  @IsString()
-  readonly role: string;
-
-  @IsArray()
-  readonly assignments: Assginment[];
 }

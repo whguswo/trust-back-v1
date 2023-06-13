@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { loginDto } from 'src/user/dto/login.dto';
 import * as bcrypt from 'bcrypt';
+import { User } from '../models';
 
 @Injectable()
 export class AuthService {
@@ -11,30 +11,20 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.userService.getUser(username, password);
-    if (typeof user !== 'string') {
-      if (user.role === 'ADMIN') {
-        const result = user;
-        return result;
-      }
+  async validateUser(username: string, password: string): Promise<User> {
+    const user = await this.userService.getUserByUsername(username);
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
     }
     return null;
   }
 
-  async login(data: loginDto) {
-    const user = await this.userService.getUserByUsername(data.username);
-    if (typeof user === 'object') {
-      const result = await bcrypt.compare(data.password, user.password);
-      if (!result) return false;
-      const payload = { username: user.username, role: user.role };
-      return {
-        access_token: this.jwtService.sign(payload, {
-          secret: process.env.JWT_SECRET_KEY,
-        }),
-      };
-    } else {
-      return false;
-    }
+  async login(user: User) {
+    // access token 설정
+    const payload = { username: user.username, role: user.role };
+    const access_token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET_KEY,
+    });
+    return { access_token };
   }
 }

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Assginment } from '../entities/assignment.entity';
+import { Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
@@ -14,6 +14,13 @@ export class User {
   @Prop({
     required: true,
     unique: true,
+    type: Types.ObjectId,
+  })
+  _id: Types.ObjectId;
+
+  @Prop({
+    required: true,
+    unique: true,
   })
   username: string;
 
@@ -24,13 +31,9 @@ export class User {
 
   @Prop({
     required: true,
+    enum: ['USER', 'ADMIN'],
   })
   role: string;
-
-  @Prop({
-    required: true,
-  })
-  assignments: Assginment[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
