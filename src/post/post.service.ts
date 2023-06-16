@@ -3,19 +3,18 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/models';
 import { Post, PostDocument } from 'src/models/post.schema';
-import { UserService } from 'src/user/user.service';
 import { CreatePostDto } from './dto/createPost.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectModel(Post.name)
     private postModel: Model<PostDocument>,
-    private readonly userService: UserService,
   ) {}
 
   async getPostById(_id: string): Promise<Post> {
-    const post = await this.postModel.findById(_id);
+    const post = await this.postModel.findById(new Types.ObjectId(_id));
     if (!post) throw new HttpException('No Post', 404);
 
     return post;
@@ -32,7 +31,7 @@ export class PostService {
   }
 
   async removePost(_id: string, user: User): Promise<boolean> {
-    const post = await this.postModel.findById(_id);
+    const post = await this.postModel.findById(new Types.ObjectId(_id));
     if (!post) throw new HttpException('No Post', 404);
     if (post.user.toString() !== user._id.toString() && user.role !== 'ADMIN')
       throw new HttpException('Permission denied', 404);
@@ -47,7 +46,7 @@ export class PostService {
     _id: string,
     user: User,
   ): Promise<Post> {
-    const post = await this.postModel.findById(_id);
+    const post = await this.postModel.findById(new Types.ObjectId(_id));
     if (!post) throw new HttpException('No Post', 404);
     if (post.user.toString() !== user._id.toString() && user.role !== 'ADMIN')
       throw new HttpException('Permission denied', 404);
@@ -58,5 +57,11 @@ export class PostService {
     post.save();
 
     return post;
+  }
+
+  async getPostByUserId(_id: string): Promise<Post[]> {
+    const posts = await this.postModel.find({ user: new Types.ObjectId(_id) });
+
+    return posts;
   }
 }

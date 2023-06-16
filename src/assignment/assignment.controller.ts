@@ -13,11 +13,13 @@ import { AssignmentDto, AssignmentStatus } from './dto/assignment.dto';
 import { Assignment } from '../models';
 import { Request } from 'express';
 import { AssignmentService } from './assignment.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('api/assign')
 export class AssignmentController {
   constructor(private readonly assignmentService: AssignmentService) {}
 
+  @ApiBearerAuth('userToken')
   @UseGuards(JwtAuthGuard)
   @Get()
   getAllAsignment(
@@ -34,6 +36,7 @@ export class AssignmentController {
     return this.assignmentService.getAllAssignByUser(request.user.username);
   }
 
+  @ApiBearerAuth('userToken')
   @UseGuards(JwtAuthGuard)
   @Post()
   createAssignment(

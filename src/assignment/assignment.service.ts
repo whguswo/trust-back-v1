@@ -1,15 +1,17 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserService } from 'src/user/user.service';
 import { Assignment, AssignmentDocument, User } from '../models';
 import { AssignmentDto, AssignmentStatus } from './dto/assignment.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class AssignmentService {
   constructor(
     @InjectModel(Assignment.name)
     private assignmentModel: Model<AssignmentDocument>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 
@@ -18,6 +20,13 @@ export class AssignmentService {
     if (!user) throw new HttpException('No exist user', 404);
 
     const result = await this.assignmentModel.find({ user: user._id });
+    return result;
+  }
+
+  async getAllAssignByUserId(id: string): Promise<Assignment[]> {
+    const result = await this.assignmentModel.find({
+      user: new Types.ObjectId(id),
+    });
     return result;
   }
 
@@ -37,7 +46,9 @@ export class AssignmentService {
   }
 
   async getAssignmentByObjectId(objectId: string): Promise<Assignment> {
-    const assignment = await this.assignmentModel.findById(objectId);
+    const assignment = await this.assignmentModel.findById(
+      new Types.ObjectId(objectId),
+    );
     if (!assignment) throw new HttpException('No exist assignment', 404);
 
     return assignment;
@@ -47,7 +58,9 @@ export class AssignmentService {
     data: AssignmentStatus,
     user: User,
   ): Promise<Assignment> {
-    const assignment = await this.assignmentModel.findById(data.assignId);
+    const assignment = await this.assignmentModel.findById(
+      new Types.ObjectId(data.assignId),
+    );
     if (!assignment) throw new HttpException('No exist assignment', 404);
     if (
       assignment.user.toString() != user._id.toString() &&

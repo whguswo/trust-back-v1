@@ -4,7 +4,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { Request } from 'express';
 import { loginDto } from 'src/user/dto/login.dto';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
