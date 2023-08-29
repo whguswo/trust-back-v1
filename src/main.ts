@@ -1,31 +1,25 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { setupSwagger } from './common/modules';
+
+import helmet from 'helmet';
+import { ValidationPipe } from '@nestjs/common';
+import { NotFoundFilter, UnauthorizedFilter } from './common/filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('API Documentation')
-    .setDescription('API documentation for your application')
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'User Identify',
-        in: 'header',
-      },
-      'userToken',
-    )
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-doc', app, document);
+  app.enableCors();
+  app.use(helmet({ contentSecurityPolicy: false }));
 
-  await app.listen(5000);
   app.useGlobalPipes(new ValidationPipe());
+
+  app.useGlobalFilters(new NotFoundFilter());
+  app.useGlobalFilters(new UnauthorizedFilter());
+
+  await setupSwagger(app);
+
+  const port = parseInt(process.env.WEB_PORT) || 5000;
+  await app.listen(port);
 }
 bootstrap();

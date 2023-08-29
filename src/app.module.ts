@@ -1,36 +1,33 @@
-import { Module } from '@nestjs/common';
-import { ApiController } from './api/api.controller';
-import { ApiService } from './api/api.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { AssignmentModule } from './assignment/assignment.module';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { AppService } from './app.service';
+import { JwtExpireMiddleware, LoggerMiddleware } from './common/middlewares';
 import { JwtModule } from '@nestjs/jwt';
-import { PostModule } from './post/post.module';
-import { ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './api/auth/auth.module';
+import { UserModule } from './api/user/user.module';
+import { PostModule } from './api/post/post.module';
 
 ConfigModule.forRoot();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      `mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@tust-web.goaab89.mongodb.net/trust-web`,
-    ),
-    UserModule,
+    MongooseModule.forRoot(process.env.MONGO_URI),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET_KEY,
+      signOptions: { expiresIn: '1h' },
+    }),
     AuthModule,
-    JwtModule,
-    AssignmentModule,
+    UserModule,
     PostModule,
   ],
-  controllers: [ApiController],
-  providers: [
-    ApiService,
-    {
-      provide: APP_PIPE,
-      useClass: ValidationPipe,
-    },
-  ],
+  controllers: [],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(JwtExpireMiddleware).exclude('/auth/(.*)').forRoutes('*');
+  }
+}

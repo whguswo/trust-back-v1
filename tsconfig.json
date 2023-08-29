@@ -16,10 +16,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/typings/*.d.ts"
-  ]
+    "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true
+  }
 }
