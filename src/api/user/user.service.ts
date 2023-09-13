@@ -26,6 +26,13 @@ export class UserService {
     return users;
   }
 
+  async getUserByUsername(username: string): Promise<UserDocument> {
+    const user = await this.userModel.findOne({ username: username }).lean();
+    if (!user) throw new HttpException('계정 또는 비밀번호가 잘못되었습니다.', 404)
+
+    return user;
+  }
+
   async createUser(data: CreateUserDto): Promise<ResponseDto> {
     const existingUser = await this.userModel.findOne({ username: data.username });
     if (existingUser) throw new HttpException('해당 사용자가 이미 존재합니다.', 404);
