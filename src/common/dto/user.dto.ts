@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsIn, IsString } from 'class-validator';
+import { CategoryValues } from '../types';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -9,6 +10,15 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   password: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsIn(CategoryValues)
+  type: string;
 }
 
 export class LoginDto {

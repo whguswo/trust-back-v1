@@ -1,10 +1,11 @@
 import { IsIn, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { CategoryValues } from '../types';
 
 export class CreatePostDto {
   @ApiProperty()
   @IsString()
-  @IsIn(['web', 'pwn', 'rev'])
+  @IsIn(CategoryValues)
   readonly category: string;
 
   @ApiProperty()

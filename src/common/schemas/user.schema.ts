@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Types } from 'mongoose';
+import { CategoryValues } from '../types';
 
 export type UserDocument = User & Document;
 
@@ -21,6 +21,22 @@ export class User {
     required: true,
   })
   password: string;
+
+  @Prop({
+    required: false,
+  })
+  name: string;
+
+  @Prop({
+    required: true,
+  })
+  hashtag: string[];
+
+  @Prop({
+    required: true,
+    enum: CategoryValues,
+  })
+  type: string;
 
   @Prop({
     required: true,

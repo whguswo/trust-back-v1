@@ -1,14 +1,12 @@
 import {
   Body,
   Controller,
-  Get,
   Post,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { User, UserDocument } from 'src/common/schemas';
 import { CreateUserDto, LoginDto, ResponseDto } from 'src/common/dto';
 import { AuthService } from './auth.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { AccessTokenResponse } from 'src/common/types';
 
 @Controller('auth')
 export class AuthController {

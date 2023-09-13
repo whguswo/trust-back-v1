@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Types } from 'mongoose';
+import { CategoryValues } from '../types';
 
 export type PostDocument = Post & Document;
 
@@ -9,11 +10,6 @@ const options: SchemaOptions = {
   versionKey: false,
 };
 
-enum PostCategory {
-  WEB = 'web',
-  PWN = 'pwn',
-  REV = 'rev',
-}
 
 @Schema(options)
 export class Post {
@@ -26,7 +22,7 @@ export class Post {
 
   @Prop({
     required: true,
-    enum: PostCategory,
+    enum: CategoryValues,
   })
   category: string;
 

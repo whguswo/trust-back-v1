@@ -42,8 +42,10 @@ export class UserService {
     const user = new this.userModel({
       username: data.username,
       password: hashedPassword,
+      name: 'a',
+      hashtag: [],
+      type: 'web',
       role: 'USER',
-      assignments: [],
     })
 
     await user.save();
