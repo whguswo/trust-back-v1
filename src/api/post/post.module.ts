@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([

@@ -5,10 +5,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Request } from 'express';
 import { User, UserDocument } from 'src/common/schemas';
-import { CreateUserDto, ResponseDto } from 'src/common/dto';
-import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
