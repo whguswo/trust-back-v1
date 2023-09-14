@@ -16,3 +16,19 @@ export class CreatePostDto {
   @IsString()
   readonly content: string;
 }
+
+export class ManagePostDto {
+  @ApiProperty()
+  @IsString()
+  @IsIn(CategoryValues)
+  readonly category: string;
+
+  @ApiProperty()
+  @IsString()
+  readonly title: string;
+
+  @ApiProperty()
+  @IsString()
+  readonly content: string;
+}
+

@@ -1,6 +1,6 @@
 import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { CreateUserDto, ResponseDto } from 'src/common/dto';
 import {
   User,
@@ -26,8 +26,27 @@ export class UserService {
     return users;
   }
 
+  async getAllMember(): Promise<UserDocument[]> {
+    const users = await this.userModel.find().lean();
+
+    users.map(user => {
+      delete user['username'];
+      delete user['password'];
+      delete user['role'];
+    });
+
+    return users;
+  }
+
   async getUserByUsername(username: string): Promise<UserDocument> {
     const user = await this.userModel.findOne({ username: username }).lean();
+    if (!user) throw new HttpException('계정 또는 비밀번호가 잘못되었습니다.', 404)
+
+    return user;
+  }
+
+  async getUserById(id: ObjectId): Promise<UserDocument> {
+    const user = await this.userModel.findById(id).lean();
     if (!user) throw new HttpException('계정 또는 비밀번호가 잘못되었습니다.', 404)
 
     return user;
@@ -42,9 +61,9 @@ export class UserService {
     const user = new this.userModel({
       username: data.username,
       password: hashedPassword,
-      name: 'a',
+      name: data.name,
       hashtag: [],
-      type: 'web',
+      type: data.type,
       role: 'USER',
     })
 

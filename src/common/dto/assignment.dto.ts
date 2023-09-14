@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsMongoId, IsString } from 'class-validator';
+import { ObjectId } from 'mongoose';
 
-export class AssignmentDto {
+export class CreateAssignmentDto {
   @ApiProperty()
-  @IsString()
-  username: string;
+  @IsMongoId()
+  readonly user: ObjectId;
 
   @ApiProperty()
   @IsString()

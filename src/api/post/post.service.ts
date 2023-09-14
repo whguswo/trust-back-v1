@@ -51,7 +51,7 @@ export class PostService {
     return result.deletedCount > 0;
   }
 
-  async modifyPost(
+  async managePost(
     data: CreatePostDto,
     post: PostDocument,
   ): Promise<PostDocument> {

@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './api/auth/auth.module';
 import { UserModule } from './api/user/user.module';
 import { PostModule } from './api/post/post.module';
+import { AssignmentModule } from './api/assignment/assignment.module';
 
 ConfigModule.forRoot();
 
@@ -21,6 +22,7 @@ ConfigModule.forRoot();
     AuthModule,
     UserModule,
     PostModule,
+    AssignmentModule,
   ],
   controllers: [],
   providers: [AppService],
