@@ -8,7 +8,7 @@ export class AdminGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
 
-    if (req.user.role !== "ADMIN") throw new HttpException("관리자만 접근 가능한 라우터 입니다.", 404);
+    if (req.user.role !== "A") throw new HttpException("관리자만 접근 가능한 라우터 입니다.", 404);
 
     return true;
   }

@@ -64,7 +64,7 @@ export class UserService {
       name: data.name,
       hashtag: [],
       type: data.type,
-      role: 'USER',
+      role: 'U',
     })
 
     await user.save();

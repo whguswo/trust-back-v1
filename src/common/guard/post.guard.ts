@@ -14,7 +14,7 @@ export class PostGuard implements CanActivate {
     const postId = req.url.split('/')[2];
     const post = await this.postService.getPostById(postId);
 
-    if (req.user.role !== "ADMIN" && !post.user.equals(req.user._id))
+    if (req.user.role !== "A" && !post.user.equals(req.user._id))
       throw new HttpException("해당 작업을 수행할 권한이 없습니다.", 403);
 
     req.post = post;
