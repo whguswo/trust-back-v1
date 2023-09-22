@@ -1,13 +1,8 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Patch,
   Post,
-  Req,
-  UseGuards,
 } from '@nestjs/common';
 import { CreateAssignmentDto } from 'src/common/dto';
 import { AssignmentDocument, PostDocument } from 'src/common/schemas';
@@ -23,7 +18,9 @@ export class AssignmentController {
   }
 
   @Post()
-  createAssignment(@Body() data: CreateAssignmentDto): Promise<AssignmentDocument> {
+  createAssignment(
+    @Body() data: CreateAssignmentDto,
+  ): Promise<AssignmentDocument> {
     return this.assignmentService.createAssignment(data);
   }
 }

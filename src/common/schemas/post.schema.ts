@@ -10,7 +10,6 @@ const options: SchemaOptions = {
   versionKey: false,
 };
 
-
 @Schema(options)
 export class Post {
   @Prop({

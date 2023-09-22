@@ -1,4 +1,4 @@
-import { forwardRef, Global, Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Post, PostSchema } from 'src/common/schemas';
 import { UserModule } from '../user/user.module';
@@ -8,9 +8,7 @@ import { PostService } from './post.service';
 @Global()
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Post.name, schema: PostSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
     UserModule,
   ],
   controllers: [PostController],

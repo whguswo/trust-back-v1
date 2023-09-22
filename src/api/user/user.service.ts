@@ -1,11 +1,8 @@
-import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId, Types } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { CreateUserDto, ResponseDto } from 'src/common/dto';
-import {
-  User,
-  UserDocument,
-} from 'src/common/schemas';
+import { User, UserDocument } from 'src/common/schemas';
 
 import * as bcrypt from 'bcrypt';
 
@@ -19,7 +16,7 @@ export class UserService {
   async getAllUser(): Promise<UserDocument[]> {
     const users = await this.userModel.find().lean();
 
-    users.map(user => {
+    users.map((user) => {
       delete user['password'];
     });
 
@@ -29,7 +26,7 @@ export class UserService {
   async getAllMember(): Promise<UserDocument[]> {
     const users = await this.userModel.find().lean();
 
-    users.map(user => {
+    users.map((user) => {
       delete user['username'];
       delete user['password'];
       delete user['role'];
@@ -40,21 +37,26 @@ export class UserService {
 
   async getUserByUsername(username: string): Promise<UserDocument> {
     const user = await this.userModel.findOne({ username: username }).lean();
-    if (!user) throw new HttpException('계정 또는 비밀번호가 잘못되었습니다.', 404)
+    if (!user)
+      throw new HttpException('계정 또는 비밀번호가 잘못되었습니다.', 404);
 
     return user;
   }
 
   async getUserById(id: ObjectId): Promise<UserDocument> {
     const user = await this.userModel.findById(id).lean();
-    if (!user) throw new HttpException('계정 또는 비밀번호가 잘못되었습니다.', 404)
+    if (!user)
+      throw new HttpException('계정 또는 비밀번호가 잘못되었습니다.', 404);
 
     return user;
   }
 
   async createUser(data: CreateUserDto): Promise<ResponseDto> {
-    const existingUser = await this.userModel.findOne({ username: data.username });
-    if (existingUser) throw new HttpException('해당 사용자가 이미 존재합니다.', 404);
+    const existingUser = await this.userModel.findOne({
+      username: data.username,
+    });
+    if (existingUser)
+      throw new HttpException('해당 사용자가 이미 존재합니다.', 404);
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
@@ -65,11 +67,10 @@ export class UserService {
       hashtag: [],
       type: data.type,
       role: 'U',
-    })
+    });
 
     await user.save();
 
     return { status: 200, message: '사용자가 등록되었습니다.' };
   }
-
 }

@@ -19,6 +19,11 @@ import { PostGuard } from 'src/common/guard';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @Get()
+  getAllPost(): Promise<PostDocument[]> {
+    return this.postService.getAllPost();
+  }
+
   @Get('/my')
   getMyPost(@Req() request: Request): Promise<PostDocument[]> {
     return this.postService.getMyPost(request.user);
@@ -39,9 +44,7 @@ export class PostController {
 
   @Delete('/:id')
   @UseGuards(PostGuard)
-  removePost(
-    @Param('id') id: string,
-  ): Promise<boolean> {
+  removePost(@Param('id') id: string): Promise<boolean> {
     return this.postService.removePost(id);
   }
 

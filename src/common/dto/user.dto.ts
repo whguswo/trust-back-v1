@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsIn, IsString } from 'class-validator';
+import { IsIn, IsString } from 'class-validator';
 import { CategoryValues } from '../types';
 
 export class CreateUserDto {

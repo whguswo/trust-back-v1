@@ -1,4 +1,4 @@
-import { PostDocument, UserDocument } from "src/common/schemas";
+import { PostDocument, UserDocument } from 'src/common/schemas';
 
 declare module 'express' {
   interface Request {

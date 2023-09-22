@@ -31,4 +31,3 @@ export class ManagePostDto {
   @IsString()
   readonly content: string;
 }
-

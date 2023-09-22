@@ -1,13 +1,8 @@
-import { forwardRef, HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreatePostDto } from 'src/common/dto';
-import {
-  Post,
-  PostDocument,
-  User,
-  UserDocument,
-} from 'src/common/schemas';
+import { Post, PostDocument, UserDocument } from 'src/common/schemas';
 
 @Injectable()
 export class PostService {
@@ -15,6 +10,12 @@ export class PostService {
     @InjectModel(Post.name)
     private postModel: Model<PostDocument>,
   ) {}
+
+  async getAllPost(): Promise<PostDocument[]> {
+    const posts = await this.postModel.find();
+
+    return posts;
+  }
 
   async getPostById(_id: string): Promise<PostDocument> {
     const post = await this.postModel.findById(new Types.ObjectId(_id));
@@ -35,7 +36,10 @@ export class PostService {
     return posts;
   }
 
-  async createPost(data: CreatePostDto, user: UserDocument): Promise<PostDocument> {
+  async createPost(
+    data: CreatePostDto,
+    user: UserDocument,
+  ): Promise<PostDocument> {
     const post = new this.postModel({
       ...data,
       user: new Types.ObjectId(user._id),
@@ -62,5 +66,4 @@ export class PostService {
 
     return post;
   }
-
 }
