@@ -30,6 +30,6 @@ ConfigModule.forRoot();
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
-    consumer.apply(JwtExpireMiddleware).exclude('/auth/(.*)').forRoutes('*');
+    consumer.apply(JwtExpireMiddleware).exclude('/auth/(.*)', '/user/member').forRoutes('*');
   }
 }

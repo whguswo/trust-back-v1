@@ -32,6 +32,16 @@ export class Assignment {
     required: true,
   })
   completed: boolean;
+
+  @Prop({
+    required: true,
+  })
+  month: number;
+
+  @Prop({
+    required: true,
+  })
+  week: number;
 }
 
 export const AssignmentSchema = SchemaFactory.createForClass(Assignment);

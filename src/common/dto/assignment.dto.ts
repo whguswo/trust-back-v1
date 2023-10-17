@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsMongoId, IsString } from 'class-validator';
+import { IsBoolean, IsMongoId, IsNumber, IsString } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
 export class CreateAssignmentDto {
@@ -14,6 +14,14 @@ export class CreateAssignmentDto {
   @ApiProperty()
   @IsString()
   readonly content: string;
+
+  @ApiProperty()
+  @IsNumber()
+  readonly month: number;
+
+  @ApiProperty()
+  @IsNumber()
+  readonly week: number;
 }
 
 export class AssignmentStatus {

@@ -32,6 +32,8 @@ export class AssignmentService {
       user: user._id,
       title: data.title,
       content: data.content,
+      month: data.month,
+      week: data.week,
       completed: false,
     });
 
