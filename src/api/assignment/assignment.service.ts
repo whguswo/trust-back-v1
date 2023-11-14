@@ -34,6 +34,7 @@ export class AssignmentService {
       content: data.content,
       month: data.month,
       week: data.week,
+      category: data.category,
       completed: false,
     });
 

@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Types } from 'mongoose';
+import { CategoryValues } from '../types';
 
 export type AssignmentDocument = Assignment & Document;
 
@@ -42,6 +43,12 @@ export class Assignment {
     required: true,
   })
   week: number;
+
+  @Prop({
+    required: true,
+    enum: CategoryValues,
+  })
+  category: string;
 }
 
 export const AssignmentSchema = SchemaFactory.createForClass(Assignment);
